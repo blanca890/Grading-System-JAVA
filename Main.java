@@ -11,6 +11,7 @@ public class Main {
 
     private static final Map<String, String> userCredentials = new HashMap<>();
     private static final Map<String, String> userRoles = new HashMap<>();
+    private static final Map<String, String> userStudentIdMap = new HashMap<>();
 
     static {
         // Add credentials and users
@@ -22,6 +23,15 @@ public class Main {
 
         userCredentials.put("student1", "student123");
         userRoles.put("student1", "Student");
+        userStudentIdMap.put("student1", "2024956");
+
+        userCredentials.put("student2", "student456");
+        userRoles.put("student2", "Student");
+        userStudentIdMap.put("student2", "2024098");
+
+        userCredentials.put("student3", "student789");
+        userRoles.put("student3", "Student");
+        userStudentIdMap.put("student3", "2024451");
 
         // Sample courses
         courses.add(new Course("Mathematics", "MATH101"));
@@ -32,12 +42,10 @@ public class Main {
         students.add(new Student("Arnold Bravo", "2024956"));
         students.add(new Student("Gon Saraza", "2024098"));
         students.add(new Student("Jenny Cruz", "2024451"));
-        
 
         teachers.add(new Teacher("John Smith", "111111"));
         teachers.add(new Teacher("James Gun", "222222"));
         teachers.add(new Teacher("Jane Doe", "333333"));
-
 
         // Assign subjects to teachers
         teachers.get(0).setSubjects(List.of("Mathematics"));
@@ -145,6 +153,48 @@ public class Main {
         } while (choice != 0);
     }
 
+    private static void assignGrades(Scanner scanner) {
+        System.out.print("Enter student ID: ");
+        String studentId = scanner.nextLine();
+        Student student = findStudentById(studentId);
+        if (student != null) {
+            System.out.print("Enter course code: ");
+            String courseCode = scanner.nextLine();
+            Course course = findCourseByCode(courseCode);
+            if (course != null) {
+                assignGrade(scanner, student, course);
+            } else {
+                System.out.println("Course not found.");
+            }
+        } else {
+            System.out.println("Student not found.");
+        }
+    }
+
+    private static void assignGrade(Scanner scanner, Student student, Course course) {
+        System.out.print("Enter grade for " + student.getName() + " in " + course.getName() + ": ");
+        String grade = scanner.nextLine();
+        student.addGrade(course, grade);
+        System.out.println("Grade " + grade + " assigned to " + student.getName() + " for " + course.getName());
+    }
+
+    private static void viewGrades() {
+        System.out.println("\n=== View Grades ===");
+        for (Student student : students) {
+            System.out.println("Student Name: " + student.getName() + ", ID: " + student.getId());
+            student.getGrades().forEach((course, grade) -> System.out.println(course.getName() + ": " + grade));
+        }
+    }
+
+    private static Course findCourseByCode(String courseCode) {
+        for (Course course : courses) {
+            if (course.getCode().equals(courseCode)) {
+                return course;
+            }
+        }
+        return null;
+    }
+
     private static void addTeacher(Scanner scanner) {
         System.out.print("Enter teacher name: ");
         String name = scanner.nextLine();
@@ -223,8 +273,7 @@ public class Main {
         return null;
     }
 
-
-        private static void generateReport() {
+    private static void generateReport() {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter("report.txt"))) {
             writer.write("Teachers:\n");
             for (Teacher teacher : teachers) {
@@ -244,16 +293,51 @@ public class Main {
     }
 
     public static void teacherInterface(Scanner scanner, String teacherId) {
-        Teacher teacher = findTeacherById(teacherId);
-        if (teacher != null) {
-            // Teacher-specific actions here
-        }
+        int choice;
+        do {
+            System.out.println("\n=== Teacher Interface ===");
+            System.out.println("1. Assign Grades");
+            System.out.println("2. View Grades");
+            System.out.println("0. Logout");
+            System.out.print("Enter your choice: ");
+            choice = scanner.nextInt();
+            scanner.nextLine(); // Consume newline
+
+            switch (choice) {
+                case 1 -> assignGrades(scanner);
+                case 2 -> viewGrades();
+                case 0 -> System.out.println("Logging out...");
+                default -> System.out.println("Invalid choice. Please try again.");
+            }
+        } while (choice != 0);
     }
 
-    public static void studentInterface(Scanner scanner, String studentId) {
+    public static void studentInterface(Scanner scanner, String username) {
+        int choice = 0;
+        do {
+            System.out.println("\n=== Student Interface ===");
+            System.out.println("1. View Grades");
+            System.out.println("0. Logout");
+            System.out.print("Enter your choice: ");
+            choice = scanner.nextInt();
+            scanner.nextLine(); // Consume newline
+
+            switch (choice) {
+                case 1 -> viewStudentGrades(username);
+                case 0 -> System.out.println("Logging out...");
+                default -> System.out.println("Invalid choice. Please try again.");
+            }
+        } while (choice != 0);
+    }
+
+    private static void viewStudentGrades(String username) {
+        String studentId = userStudentIdMap.get(username);
         Student student = findStudentById(studentId);
         if (student != null) {
-            student.navigate(scanner); // Assuming the Student class has a navigate method
+            System.out.println("Student Name: " + student.getName() + ", ID: " + student.getId());
+            student.getGrades().forEach((course, grade) -> System.out.println(course.getName() + ": " + grade));
+        } else {
+            System.out.println("Student not found.");
         }
     }
 
@@ -264,6 +348,4 @@ public class Main {
     public static List<Course> getCourses() {
         return courses;
     }
-
-
 }
