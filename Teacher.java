@@ -44,10 +44,26 @@ public class Teacher extends User {
 
     // Method to assign grade to a student
     public void assignGrade(Scanner scanner, Student student, Course course) {
-        System.out.print("Enter grade for " + student.getName() + " in " + course.getName() + ": ");
-        String grade = scanner.nextLine();
-        student.addGrade(course, grade);
-        System.out.println("Grade " + grade + " assigned to " + student.getName() + " for " + course.getName());
+        System.out.print("Enter grade for Quiz 1 (1-100): ");
+        int quiz1 = scanner.nextInt();
+        System.out.print("Enter grade for Quiz 2 (1-100): ");
+        int quiz2 = scanner.nextInt();
+        System.out.print("Enter grade for Quiz 3 (1-100): ");
+        int quiz3 = scanner.nextInt();
+        System.out.print("Enter grade for Project (1-100): ");
+        int project = scanner.nextInt();
+        System.out.print("Enter grade for Summative Exam (1-100): ");
+        int summativeExam = scanner.nextInt();
+        System.out.print("Enter grade for Final Exam (1-100): ");
+        int finalExam = scanner.nextInt();
+        scanner.nextLine(); // Consume newline
+
+        int total = quiz1 + quiz2 + quiz3 + project + summativeExam + finalExam;
+        double percentage = total / 6.0;
+        String status = percentage >= 75 ? "Pass" : "Fail";
+
+        student.addGrade(course, quiz1, quiz2, quiz3, project, summativeExam, finalExam, percentage, status);
+        System.out.println("Grades assigned to " + student.getName() + " for " + course.getName());
     }
 
     public void assignGradeToStudent(Scanner scanner) {

@@ -33,6 +33,10 @@ public class Main {
         userRoles.put("student3", "Student");
         userStudentIdMap.put("student3", "2024451");
 
+        userCredentials.put("student4", "student000");
+        userRoles.put("student4", "Student");
+        userStudentIdMap.put("student4", "2024000");
+
         // Sample courses
         courses.add(new Course("Mathematics", "MATH101"));
         courses.add(new Course("Science", "SCI101"));
@@ -42,6 +46,7 @@ public class Main {
         students.add(new Student("Arnold Bravo", "2024956"));
         students.add(new Student("Gon Saraza", "2024098"));
         students.add(new Student("Jenny Cruz", "2024451"));
+        students.add(new Student("Failed Student", "2024000"));
 
         teachers.add(new Teacher("John Smith", "111111"));
         teachers.add(new Teacher("James Gun", "222222"));
@@ -53,10 +58,11 @@ public class Main {
         teachers.get(2).setSubjects(List.of("Science"));
 
         // Assign grades to students
-        students.get(0).addGrade(courses.get(0), "A");
-        students.get(0).addGrade(courses.get(1), "B");
-        students.get(1).addGrade(courses.get(2), "C");
-        students.get(2).addGrade(courses.get(0), "B+");
+        students.get(0).addGrade(courses.get(0), 90, 90, 90, 90, 90, 90, 90.0, "Pass");
+        students.get(0).addGrade(courses.get(1), 80, 80, 80, 80, 80, 80, 80.0, "Pass");
+        students.get(1).addGrade(courses.get(2), 70, 70, 70, 70, 70, 70, 70.0, "Fail");
+        students.get(2).addGrade(courses.get(0), 85, 85, 85, 85, 85, 85, 85.0, "Pass");
+        students.get(3).addGrade(courses.get(1), 50, 50, 50, 50, 50, 50, 50.0, "Fail");
     }
 
     public static void main(String[] args) {
@@ -199,38 +205,82 @@ public class Main {
     }
 
     private static void assignGrade(Scanner scanner, Student student, Course course) {
-        System.out.print("Enter grade for " + student.getName() + " in " + course.getName() + ": ");
-        String grade = scanner.nextLine();
-        student.addGrade(course, grade);
-        System.out.println("Grade " + grade + " assigned to " + student.getName() + " for " + course.getName());
-    }
+        System.out.print("Enter grade for Quiz 1: ");
+        int quiz1 = scanner.nextInt();
+        System.out.print("Enter grade for Quiz 2: ");
+        int quiz2 = scanner.nextInt();
+        System.out.print("Enter grade for Quiz 3: ");
+        int quiz3 = scanner.nextInt();
+        System.out.print("Enter grade for Project: ");
+        int project = scanner.nextInt();
+        System.out.print("Enter grade for Summative Exam: ");
+        int summativeExam = scanner.nextInt();
+        System.out.print("Enter grade for Final Exam: ");
+        int finalExam = scanner.nextInt();
+        scanner.nextLine(); // Consume newline
 
-    private static void viewGrades() {
+        double totalGrade = (quiz1 + quiz2 + quiz3 + project + summativeExam + finalExam) / 6.0;
+        String status = totalGrade >= 60 ? "Pass" : "Fail";
+        student.addGrade(course, quiz1, quiz2, quiz3, project, summativeExam, finalExam, totalGrade, status);
+        System.out.println("Grades assigned to " + student.getName() + " for " + course.getName());
+        }
+
+        private static void viewGrades() {
         System.out.println("===============================");
         System.out.println("=== View All Student Grades ===");
         System.out.println("===============================");
-        System.out.printf("%-20s %-10s %-20s %-20s %-10s%n", "Student Name", "ID", "Course", "Course Code", "Grade");
-        System.out.println("--------------------------------------------------------------------------------");
+        System.out.printf("%-20s | %-10s | %-20s | %-10s | %-10s | %-10s | %-10s | %-15s | %-10s | %-10s | %-10s%n", "Student Name", "ID", "Course", "Quiz 1", "Quiz 2", "Quiz 3", "Project", "Summative Exam", "Final Exam", "Percentage", "Status");
+        System.out.println("----------------------------------------------------------------------------------------------------------------------------------------------------------------");
         for (Student student : students) {
             boolean firstEntry = true;
             if (student.getGrades().isEmpty()) {
-                // If the student has no grades, still print the student info
-                System.out.printf("%-20s %-10s %-20s %-20s %-10s%n", student.getName(), student.getId(), "N/A", "N/A", "N/A");
+            // If the student has no grades, still print the student info
+            System.out.printf("%-20s | %-10s | %-20s | %-10s | %-10s | %-10s | %-10s | %-15s | %-10s | %-10s | %-10s%n", student.getName(), student.getId(), "N/A", "N/A", "N/A", "N/A", "N/A", "N/A", "N/A", "N/A", "N/A");
             } else {
-                for (Map.Entry<Course, String> entry : student.getGrades().entrySet()) {
-                    Course course = entry.getKey();
-                    String grade = entry.getValue();
-                    if (firstEntry) {
-                        System.out.printf("%-20s %-10s %-20s %-20s %-10s%n", student.getName(), student.getId(), course.getName(), course.getCode(), grade);
-                        firstEntry = false;
-                    } else {
-                        System.out.printf("%-20s %-10s %-20s %-20s %-10s%n", "", "", course.getName(), course.getCode(), grade);
-                    }
+            for (Map.Entry<Course, Map<String, Integer>> entry : student.getGrades().entrySet()) {
+                Course course = entry.getKey();
+                Map<String, Integer> gradeDetails = entry.getValue();
+                int total = gradeDetails.get("Quiz 1") + gradeDetails.get("Quiz 2") + gradeDetails.get("Quiz 3") + gradeDetails.get("Project") + gradeDetails.get("Summative Exam") + gradeDetails.get("Final Exam");
+                double percentage = total / 6.0;
+                String status = percentage >= 75 ? "Pass" : "Fail";
+                if (firstEntry) {
+                System.out.printf("%-20s | %-10s | %-20s | %-10d | %-10d | %-10d | %-10d | %-15d | %-10d | %-10.2f | %-10s%n", student.getName(), student.getId(), course.getName(), gradeDetails.get("Quiz 1"), gradeDetails.get("Quiz 2"), gradeDetails.get("Quiz 3"), gradeDetails.get("Project"), gradeDetails.get("Summative Exam"), gradeDetails.get("Final Exam"), percentage, status);
+                firstEntry = false;
+                } else {
+                System.out.printf("%-20s | %-10s | %-20s | %-10d | %-10d | %-10d | %-10d | %-15d | %-10d | %-10.2f | %-10s%n", "", "", course.getName(), gradeDetails.get("Quiz 1"), gradeDetails.get("Quiz 2"), gradeDetails.get("Quiz 3"), gradeDetails.get("Project"), gradeDetails.get("Summative Exam"), gradeDetails.get("Final Exam"), percentage, status);
                 }
             }
+            }
+        }
+        }
+
+        private static void viewStudentGrades(String username) {
+        String studentId = userStudentIdMap.get(username);
+        Student student = findStudentById(studentId);
+        if (student != null) {
+            System.out.println("===============================");
+            System.out.println("======= Student Grades ========");
+            System.out.println("===============================");
+            System.out.printf("%-20s | %-10s | %-20s | %-10s | %-10s | %-10s | %-10s | %-15s | %-10s | %-10s | %-10s%n", "Student Name", "ID", "Course", "Quiz 1", "Quiz 2", "Quiz 3", "Project", "Summative Exam", "Final Exam", "Percentage", "Status");
+            System.out.println("----------------------------------------------------------------------------------------------------------------------------------------------------------------");
+            boolean firstEntry = true;
+            for (Map.Entry<Course, Map<String, Integer>> entry : student.getGrades().entrySet()) {
+                Course course = entry.getKey();
+                Map<String, Integer> gradeDetails = entry.getValue();
+                int total = gradeDetails.get("Quiz 1") + gradeDetails.get("Quiz 2") + gradeDetails.get("Quiz 3") + gradeDetails.get("Project") + gradeDetails.get("Summative Exam") + gradeDetails.get("Final Exam");
+                double percentage = total / 6.0;
+                String status = percentage >= 75 ? "Pass" : "Fail";
+                if (firstEntry) {
+                    System.out.printf("%-20s | %-10s | %-20s | %-10d | %-10d | %-10d | %-10d | %-15d | %-10d | %-10.2f | %-10s%n", student.getName(), student.getId(), course.getName(), gradeDetails.get("Quiz 1"), gradeDetails.get("Quiz 2"), gradeDetails.get("Quiz 3"), gradeDetails.get("Project"), gradeDetails.get("Summative Exam"), gradeDetails.get("Final Exam"), percentage, status);
+                    firstEntry = false;
+                } else {
+                    System.out.printf("%-20s | %-10s | %-20s | %-10d | %-10d | %-10d | %-10d | %-15d | %-10d | %-10.2f | %-10s%n", "", "", course.getName(), gradeDetails.get("Quiz 1"), gradeDetails.get("Quiz 2"), gradeDetails.get("Quiz 3"), gradeDetails.get("Project"), gradeDetails.get("Summative Exam"), gradeDetails.get("Final Exam"), percentage, status);
+                }
+            }
+        } else {
+            System.out.println("Student not found.");
         }
     }
-
 
     private static Course findCourseByCode(String courseCode) {
         for (Course course : courses) {
@@ -308,9 +358,10 @@ public class Main {
                 // If the student has no grades, still print the student info
                 System.out.printf("%-20s %-10s %-20s %-20s %-10s%n", student.getName(), student.getId(), "N/A", "N/A", "N/A");
             } else {
-                for (Map.Entry<Course, String> entry : student.getGrades().entrySet()) {
+                for (Map.Entry<Course, Map<String, Integer>> entry : student.getGrades().entrySet()) {
                     Course course = entry.getKey();
-                    String grade = entry.getValue();
+                    Map<String, Integer> gradeDetails = entry.getValue();
+                    String grade = String.valueOf(gradeDetails.get("Final Exam")); // or any specific grade key you want to display
                     if (firstEntry) {
                         System.out.printf("%-20s %-10s %-20s %-20s %-10s%n", student.getName(), student.getId(), course.getName(), course.getCode(), grade);
                         firstEntry = false;
@@ -411,21 +462,6 @@ public class Main {
                 default -> System.out.println("Invalid choice. Please try again.");
             }
         } while (choice != 0);
-    }
-
-    private static void viewStudentGrades(String username) {
-        String studentId = userStudentIdMap.get(username);
-        Student student = findStudentById(studentId);
-        if (student != null) {
-            System.out.println("===============================");
-            System.out.println("======= Student Grades ========");
-            System.out.println("===============================");
-            System.out.printf("%-20s %-10s%n", "Course", "Grade");
-            System.out.println("----------------------------------------");
-            student.getGrades().forEach((course, grade) -> System.out.printf("%-20s %-10s%n", course.getName(), grade));
-        } else {
-            System.out.println("Student not found.");
-        }
     }
 
     public static List<Student> getStudents() {
