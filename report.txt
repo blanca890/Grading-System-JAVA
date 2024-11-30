@@ -4,6 +4,8 @@ Name: James Gun, ID: 222222, Subjects: [History]
 Name: Jane Doe, ID: 333333, Subjects: [Science]
 
 Students:
-Name: Arnold Bravo, ID: 2024956, Grades: {Course Name: Mathematics, Code: MATH101=A, Course Name: Science, Code: SCI101=B}
-Name: Gon Saraza, ID: 2024098, Grades: {Course Name: Mathematics, Code: MATH101=B, Course Name: History, Code: HIST101=D}
-Name: Jenny Cruz, ID: 2024451, Grades: {Course Name: Mathematics, Code: MATH101=B+}
+Name: Arnold Bravo, ID: 2024956, Grades: {Course Name: Mathematics, Code: MATH101={Summative Exam=90, Status=1, Project=90, Quiz 3=90, Total=90, Final Exam=90, Quiz 1=90, Quiz 2=90}, Course Name: Science, Code: SCI101={Summative Exam=80, Status=1, Project=80, Quiz 3=80, Total=80, Final Exam=80, Quiz 1=80, Quiz 2=80}}
+Name: Gon Saraza, ID: 2024098, Grades: {Course Name: History, Code: HIST101={Summative Exam=70, Status=0, Project=70, Quiz 3=70, Total=70, Final Exam=70, Quiz 1=70, Quiz 2=70}}
+Name: Jenny Cruz, ID: 2024451, Grades: {Course Name: Mathematics, Code: MATH101={Summative Exam=85, Status=1, Project=85, Quiz 3=85, Total=85, Final Exam=85, Quiz 1=85, Quiz 2=85}}
+Name: Failed Student, ID: 2024000, Grades: {Course Name: Science, Code: SCI101={Summative Exam=50, Status=0, Project=50, Quiz 3=50, Total=50, Final Exam=50, Quiz 1=50, Quiz 2=50}}
+Name: Coco Man, ID: 1, Grades: {Course Name: History, Code: HIST101={Summative Exam=60, Status=0, Project=70, Quiz 3=50, Total=59, Final Exam=96, Quiz 1=49, Quiz 2=32}}
