@@ -209,12 +209,28 @@ public class Main {
         System.out.println("===============================");
         System.out.println("=== View All Student Grades ===");
         System.out.println("===============================");
-        System.out.printf("%-20s %-10s %-30s%n", "Student Name", "ID", "Grades");
-        System.out.println("--------------------------------------------------------------");
+        System.out.printf("%-20s %-10s %-20s %-20s %-10s%n", "Student Name", "ID", "Course", "Course Code", "Grade");
+        System.out.println("--------------------------------------------------------------------------------");
         for (Student student : students) {
-            System.out.printf("%-20s %-10s %-30s%n", student.getName(), student.getId(), student.getGrades());
+            boolean firstEntry = true;
+            if (student.getGrades().isEmpty()) {
+                // If the student has no grades, still print the student info
+                System.out.printf("%-20s %-10s %-20s %-20s %-10s%n", student.getName(), student.getId(), "N/A", "N/A", "N/A");
+            } else {
+                for (Map.Entry<Course, String> entry : student.getGrades().entrySet()) {
+                    Course course = entry.getKey();
+                    String grade = entry.getValue();
+                    if (firstEntry) {
+                        System.out.printf("%-20s %-10s %-20s %-20s %-10s%n", student.getName(), student.getId(), course.getName(), course.getCode(), grade);
+                        firstEntry = false;
+                    } else {
+                        System.out.printf("%-20s %-10s %-20s %-20s %-10s%n", "", "", course.getName(), course.getCode(), grade);
+                    }
+                }
+            }
         }
     }
+
 
     private static Course findCourseByCode(String courseCode) {
         for (Course course : courses) {

@@ -2,10 +2,8 @@ Teachers:
 Name: John Smith, ID: 111111, Subjects: [Mathematics]
 Name: James Gun, ID: 222222, Subjects: [History]
 Name: Jane Doe, ID: 333333, Subjects: [Science]
-Name: 0, ID: 0, Subjects: [0]
 
 Students:
 Name: Arnold Bravo, ID: 2024956, Grades: {Course Name: Mathematics, Code: MATH101=A, Course Name: Science, Code: SCI101=B}
-Name: Gon Saraza, ID: 2024098, Grades: {Course Name: History, Code: HIST101=C}
+Name: Gon Saraza, ID: 2024098, Grades: {Course Name: Mathematics, Code: MATH101=B, Course Name: History, Code: HIST101=D}
 Name: Jenny Cruz, ID: 2024451, Grades: {Course Name: Mathematics, Code: MATH101=B+}
-Name: gelton, ID: 1, Grades: {Course Name: Mathematics, Code: MATH101=C}
