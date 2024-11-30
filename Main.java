@@ -169,7 +169,7 @@ public class Main {
             choice = scanner.nextInt();
             scanner.nextLine(); // Consume newline
             ClearScreen();
-
+    
             switch (choice) {
                 case 1 -> viewAllStudents();
                 case 2 -> addStudent(scanner);
@@ -288,14 +288,19 @@ public class Main {
         System.out.println("--------------------------------------------------------------------------------");
         for (Student student : students) {
             boolean firstEntry = true;
-            for (Map.Entry<Course, String> entry : student.getGrades().entrySet()) {
-                Course course = entry.getKey();
-                String grade = entry.getValue();
-                if (firstEntry) {
-                    System.out.printf("%-20s %-10s %-20s %-20s %-10s%n", student.getName(), student.getId(), course.getName(), course.getCode(), grade);
-                    firstEntry = false;
-                } else {
-                    System.out.printf("%-20s %-10s %-20s %-20s %-10s%n", "", "", course.getName(), course.getCode(), grade);
+            if (student.getGrades().isEmpty()) {
+                // If the student has no grades, still print the student info
+                System.out.printf("%-20s %-10s %-20s %-20s %-10s%n", student.getName(), student.getId(), "N/A", "N/A", "N/A");
+            } else {
+                for (Map.Entry<Course, String> entry : student.getGrades().entrySet()) {
+                    Course course = entry.getKey();
+                    String grade = entry.getValue();
+                    if (firstEntry) {
+                        System.out.printf("%-20s %-10s %-20s %-20s %-10s%n", student.getName(), student.getId(), course.getName(), course.getCode(), grade);
+                        firstEntry = false;
+                    } else {
+                        System.out.printf("%-20s %-10s %-20s %-20s %-10s%n", "", "", course.getName(), course.getCode(), grade);
+                    }
                 }
             }
         }
