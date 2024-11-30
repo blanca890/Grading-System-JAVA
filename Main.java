@@ -63,11 +63,14 @@ public class Main {
         Scanner scanner = new Scanner(System.in);
 
         while (true) {
-            System.out.println("=== Welcome to the Grading System ===");
+            System.out.println("==========================================");
+            System.out.println("======== Welcome to Grading System =======");
+            System.out.println("==========================================");
             System.out.print("Enter Username: ");
             String username = scanner.nextLine();
             System.out.print("Enter Password: ");
             String password = scanner.nextLine();
+            ClearScreen();
 
             if (authenticateUser(username, password)) {
                 String role = userRoles.get(username);
@@ -90,14 +93,22 @@ public class Main {
     private static void adminInterface(Scanner scanner) {
         int choice;
         do {
-            System.out.println("\n=== Admin Menu ===");
+            System.out.println("=============================");
+            System.out.println("====== Admin Interface ======");
+            System.out.println("=============================");
             System.out.println("1. Teacher");
             System.out.println("2. Students");
             System.out.println("3. Generate Report");
             System.out.println("0. Logout");
             System.out.print("Enter your choice: ");
+            while (!scanner.hasNextInt()) {
+                System.out.println("Invalid choice. Please try again.");
+                scanner.next(); // Consume invalid input
+                System.out.print("Enter your choice: ");
+            }
             choice = scanner.nextInt();
             scanner.nextLine(); // Consume newline
+            ClearScreen();
 
             switch (choice) {
                 case 1 -> teacherManagement(scanner);  // Navigate Teacher options
@@ -112,14 +123,22 @@ public class Main {
     private static void teacherManagement(Scanner scanner) {
         int choice;
         do {
-            System.out.println("\n=== Teacher Management ===");
+            System.out.println("=================================");
+            System.out.println("====== Teacher Management =======");
+            System.out.println("=================================");
             System.out.println("1. View All Teachers");
             System.out.println("2. Add Teacher");
             System.out.println("3. Remove Teacher");
             System.out.println("0. Back to Admin Menu");
             System.out.print("Enter your choice: ");
+            while (!scanner.hasNextInt()) {
+                System.out.println("Invalid choice. Please try again.");
+                scanner.next(); // Consume invalid input
+                System.out.print("Enter your choice: ");
+            }
             choice = scanner.nextInt();
             scanner.nextLine(); // Consume newline
+            ClearScreen();
 
             switch (choice) {
                 case 1 -> viewAllTeachers();
@@ -134,14 +153,22 @@ public class Main {
     private static void studentManagement(Scanner scanner) {
         int choice;
         do {
-            System.out.println("\n=== Student Management ===");
+            System.out.println("===============================");
+            System.out.println("===== Student Management =====");
+            System.out.println("===============================");
             System.out.println("1. View All Students with Grades");
             System.out.println("2. Add Student");
             System.out.println("3. Remove Student");
             System.out.println("0. Back to Admin Menu");
             System.out.print("Enter your choice: ");
+            while (!scanner.hasNextInt()) {
+                System.out.println("Invalid choice. Please try again.");
+                scanner.next(); // Consume invalid input
+                System.out.print("Enter your choice: ");
+            }
             choice = scanner.nextInt();
             scanner.nextLine(); // Consume newline
+            ClearScreen();
 
             switch (choice) {
                 case 1 -> viewAllStudents();
@@ -179,10 +206,13 @@ public class Main {
     }
 
     private static void viewGrades() {
-        System.out.println("\n=== View Grades ===");
+        System.out.println("===============================");
+        System.out.println("=== View All Student Grades ===");
+        System.out.println("===============================");
+        System.out.printf("%-20s %-10s %-30s%n", "Student Name", "ID", "Grades");
+        System.out.println("--------------------------------------------------------------");
         for (Student student : students) {
-            System.out.println("Student Name: " + student.getName() + ", ID: " + student.getId());
-            student.getGrades().forEach((course, grade) -> System.out.println(course.getName() + ": " + grade));
+            System.out.printf("%-20s %-10s %-30s%n", student.getName(), student.getId(), student.getGrades());
         }
     }
 
@@ -200,7 +230,9 @@ public class Main {
         String name = scanner.nextLine();
         System.out.print("Enter teacher ID: ");
         String id = scanner.nextLine();
-        teachers.add(new Teacher(name, id));
+        System.out.print("Enter subjects (comma-separated): ");
+        String subjects = scanner.nextLine();
+        teachers.add(new Teacher(name, id, Arrays.asList(subjects.split(","))));
         System.out.println("Teacher added successfully.");
     }
 
@@ -238,20 +270,34 @@ public class Main {
     }
 
     public static void viewAllTeachers() {
-        System.out.println("\n=== View All Teachers ===");
+        System.out.println("===============================");
+        System.out.println("===== View All Teachers ======");
+        System.out.println("===============================");
+        System.out.printf("%-20s %-10s %-30s%n", "Teacher Name", "ID", "Subjects");
+        System.out.println("--------------------------------------------------------------");
         for (Teacher teacher : teachers) {
-            System.out.println("Teacher Name: " + teacher.getName() + ", ID: " + teacher.getId());
-            // Assuming Teacher class has a getSubjects method
-            System.out.println("Subjects: " + teacher.getSubjects());
+            System.out.printf("%-20s %-10s %-30s%n", teacher.getName(), teacher.getId(), teacher.getSubjects());
         }
     }
 
     public static void viewAllStudents() {
-        System.out.println("\n=== View All Students ===");
+        System.out.println("===============================");
+        System.out.println("====== View All Students ======");
+        System.out.println("===============================");
+        System.out.printf("%-20s %-10s %-20s %-20s %-10s%n", "Student Name", "ID", "Course", "Code", "Grade");
+        System.out.println("--------------------------------------------------------------------------------");
         for (Student student : students) {
-            System.out.println("Student Name: " + student.getName() + ", ID: " + student.getId());
-            // Assuming Student class has a getGrades method
-            System.out.println("Grades: " + student.getGrades());
+            boolean firstEntry = true;
+            for (Map.Entry<Course, String> entry : student.getGrades().entrySet()) {
+                Course course = entry.getKey();
+                String grade = entry.getValue();
+                if (firstEntry) {
+                    System.out.printf("%-20s %-10s %-20s %-20s %-10s%n", student.getName(), student.getId(), course.getName(), course.getCode(), grade);
+                    firstEntry = false;
+                } else {
+                    System.out.printf("%-20s %-10s %-20s %-20s %-10s%n", "", "", course.getName(), course.getCode(), grade);
+                }
+            }
         }
     }
 
@@ -295,13 +341,21 @@ public class Main {
     public static void teacherInterface(Scanner scanner, String teacherId) {
         int choice;
         do {
-            System.out.println("\n=== Teacher Interface ===");
+            System.out.println("===============================");
+            System.out.println("====== Teacher Interface ======");
+            System.out.println("===============================");
             System.out.println("1. Assign Grades");
             System.out.println("2. View Grades");
             System.out.println("0. Logout");
             System.out.print("Enter your choice: ");
+            while (!scanner.hasNextInt()) {
+                System.out.println("Invalid choice. Please try again.");
+                scanner.next(); // Consume invalid input
+                System.out.print("Enter your choice: ");
+            }
             choice = scanner.nextInt();
             scanner.nextLine(); // Consume newline
+            ClearScreen();
 
             switch (choice) {
                 case 1 -> assignGrades(scanner);
@@ -315,12 +369,20 @@ public class Main {
     public static void studentInterface(Scanner scanner, String username) {
         int choice = 0;
         do {
-            System.out.println("\n=== Student Interface ===");
+            System.out.println("===============================");
+            System.out.println("=======Student Interface=======");
+            System.out.println("===============================");
             System.out.println("1. View Grades");
             System.out.println("0. Logout");
             System.out.print("Enter your choice: ");
+            while (!scanner.hasNextInt()) {
+                System.out.println("Invalid choice. Please try again.");
+                scanner.next(); // Consume invalid input
+                System.out.print("Enter your choice: ");
+            }
             choice = scanner.nextInt();
             scanner.nextLine(); // Consume newline
+            ClearScreen();
 
             switch (choice) {
                 case 1 -> viewStudentGrades(username);
@@ -334,8 +396,12 @@ public class Main {
         String studentId = userStudentIdMap.get(username);
         Student student = findStudentById(studentId);
         if (student != null) {
-            System.out.println("Student Name: " + student.getName() + ", ID: " + student.getId());
-            student.getGrades().forEach((course, grade) -> System.out.println(course.getName() + ": " + grade));
+            System.out.println("===============================");
+            System.out.println("======= Student Grades ========");
+            System.out.println("===============================");
+            System.out.printf("%-20s %-10s%n", "Course", "Grade");
+            System.out.println("----------------------------------------");
+            student.getGrades().forEach((course, grade) -> System.out.printf("%-20s %-10s%n", course.getName(), grade));
         } else {
             System.out.println("Student not found.");
         }
@@ -347,5 +413,10 @@ public class Main {
 
     public static List<Course> getCourses() {
         return courses;
+    }
+
+    public static void ClearScreen() {
+        System.out.print("\033[H\033[2J");
+        System.out.flush();
     }
 }

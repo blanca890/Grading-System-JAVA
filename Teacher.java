@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
@@ -11,7 +12,18 @@ public class Teacher extends User {
         super(id); // Call to the superclass constructor
         this.name = name;
         this.id = id;
+        this.subjects = new ArrayList<>();
     }
+
+    public Teacher(String name, String id, List<String> subjects) {
+        super(id); // Call to the superclass constructor
+        this.name = name;
+        this.id = id;
+        this.subjects = subjects;
+    }
+
+
+    
 
     public String getName() {
         return name;
