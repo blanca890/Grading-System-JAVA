@@ -1,4 +1,5 @@
 import java.io.BufferedWriter;
+import java.io.Console;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.*;
@@ -15,25 +16,25 @@ public class Main {
 
     static {
         // Add credentials and users
-        userCredentials.put("admin", "admin123");
+        userCredentials.put("admin", "admin1");
         userRoles.put("admin", "Admin");
 
-        userCredentials.put("teacher1", "teacher123");
+        userCredentials.put("teacher1", "teacher1");
         userRoles.put("teacher1", "Teacher");
 
-        userCredentials.put("student1", "student123");
+        userCredentials.put("student1", "student1");
         userRoles.put("student1", "Student");
         userStudentIdMap.put("student1", "2024956");
 
-        userCredentials.put("student2", "student456");
+        userCredentials.put("student2", "student2");
         userRoles.put("student2", "Student");
         userStudentIdMap.put("student2", "2024098");
 
-        userCredentials.put("student3", "student789");
+        userCredentials.put("student3", "student3");
         userRoles.put("student3", "Student");
         userStudentIdMap.put("student3", "2024451");
 
-        userCredentials.put("student4", "student000");
+        userCredentials.put("student4", "student4");
         userRoles.put("student4", "Student");
         userStudentIdMap.put("student4", "2024000");
 
@@ -103,6 +104,7 @@ public class Main {
 
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
+        Console console = System.console();
 
         while (true) {
             System.out.println("==========================================");
@@ -110,8 +112,14 @@ public class Main {
             System.out.println("==========================================");
             System.out.print("Enter Username: ");
             String username = scanner.nextLine();
-            System.out.print("Enter Password: ");
-            String password = scanner.nextLine();
+            String password;
+            if (console == null) {
+                System.out.print("Enter Password: ");
+                password = scanner.nextLine();
+            } else {
+                char[] passwordArray = console.readPassword("Enter Password: ");
+                password = new String(passwordArray);
+            }
             ClearScreen();
 
             if (authenticateUser(username, password)) {
@@ -488,6 +496,7 @@ public class Main {
             System.out.println("=======Student Interface=======");
             System.out.println("===============================");
             System.out.println("1. View Grades");
+            System.out.println("2. Print Grades to File");
             System.out.println("0. Logout");
             System.out.print("Enter your choice: ");
             while (!scanner.hasNextInt()) {
@@ -501,10 +510,27 @@ public class Main {
 
             switch (choice) {
                 case 1 -> viewStudentGrades(username);
+                case 2 -> printGradesToFile(username);
                 case 0 -> System.out.println("Logging out...");
                 default -> System.out.println("Invalid choice. Please try again.");
             }
         } while (choice != 0);
+    }
+
+    private static void printGradesToFile(String username) {
+        String studentId = userStudentIdMap.get(username);
+        Student student = findStudentById(studentId);
+        if (student != null) {
+            try (BufferedWriter writer = new BufferedWriter(new FileWriter(student.getName() + "_grades.txt"))) {
+                writer.write(student.getCourseGradeTable());
+                System.out.println("Grades saved to " + student.getName() + "_grades.txt");
+            } catch (IOException e) {
+                System.out.println("An error occurred while saving the grades.");
+                e.printStackTrace();
+            }
+        } else {
+            System.out.println("Student not found.");
+        }
     }
 
     public static List<Student> getStudents() {

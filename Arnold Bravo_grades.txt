@@ -1,0 +1,5 @@
+Course               Quiz 1     Quiz 2     Quiz 3     Project    Summative Exam  Final Exam Percentage Status    
+--------------------------------------------------------------------------------------------------------
+Mathematics          90         90         90         90         90              90         90.00      Pass      
+Science              80         80         80         80         80              80         80.00      Pass      
+Physics              85         85         85         85         85              85         85.00      Pass      
