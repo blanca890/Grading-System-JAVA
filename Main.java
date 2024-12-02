@@ -108,7 +108,9 @@ public class Main {
 
         while (true) {
             System.out.println("==========================================");
-            System.out.println("======== Welcome to Grading System =======");
+            System.out.println("||         Welcome to Grading System    ||");
+            System.out.println("==========================================");
+            System.out.println("|| Please log in to continue            ||");
             System.out.println("==========================================");
             System.out.print("Enter Username: ");
             String username = scanner.nextLine();
@@ -123,6 +125,7 @@ public class Main {
             ClearScreen();
 
             if (authenticateUser(username, password)) {
+                System.out.print("Welcome, " + username + "! ");
                 String role = userRoles.get(username);
                 switch (role) {
                     case "Admin" -> adminInterface(scanner);
@@ -143,7 +146,7 @@ public class Main {
     private static void adminInterface(Scanner scanner) {
         int choice;
         do {
-            System.out.println("=============================");
+            System.out.println("\n=============================");
             System.out.println("====== Admin Interface ======");
             System.out.println("=============================");
             System.out.println("1. Teacher");
@@ -464,7 +467,7 @@ public class Main {
     public static void teacherInterface(Scanner scanner, String teacherId) {
         int choice;
         do {
-            System.out.println("===============================");
+            System.out.println("\n===============================");
             System.out.println("====== Teacher Interface ======");
             System.out.println("===============================");
             System.out.println("1. Assign Grades");
@@ -492,11 +495,10 @@ public class Main {
     public static void studentInterface(Scanner scanner, String username) {
         int choice = 0;
         do {
-            System.out.println("===============================");
+            System.out.println("\n===============================");
             System.out.println("=======Student Interface=======");
             System.out.println("===============================");
             System.out.println("1. View Grades");
-            System.out.println("2. Print Grades to File");
             System.out.println("0. Logout");
             System.out.print("Enter your choice: ");
             while (!scanner.hasNextInt()) {
@@ -510,27 +512,10 @@ public class Main {
 
             switch (choice) {
                 case 1 -> viewStudentGrades(username);
-                case 2 -> printGradesToFile(username);
                 case 0 -> System.out.println("Logging out...");
                 default -> System.out.println("Invalid choice. Please try again.");
             }
         } while (choice != 0);
-    }
-
-    private static void printGradesToFile(String username) {
-        String studentId = userStudentIdMap.get(username);
-        Student student = findStudentById(studentId);
-        if (student != null) {
-            try (BufferedWriter writer = new BufferedWriter(new FileWriter(student.getName() + "_grades.txt"))) {
-                writer.write(student.getCourseGradeTable());
-                System.out.println("Grades saved to " + student.getName() + "_grades.txt");
-            } catch (IOException e) {
-                System.out.println("An error occurred while saving the grades.");
-                e.printStackTrace();
-            }
-        } else {
-            System.out.println("Student not found.");
-        }
     }
 
     public static List<Student> getStudents() {
