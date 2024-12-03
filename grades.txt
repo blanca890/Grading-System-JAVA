@@ -1,0 +1,36 @@
+Grades for Arnold Bravo (2024956):
+Course               Quiz 1     Quiz 2     Quiz 3     Project    Summative Exam  Final Exam Percentage Status    
+--------------------------------------------------------------------------------------------------------
+Mathematics          90         90         90         90         90              90         90.00      Pass      
+Science              80         80         80         80         80              80         80.00      Pass      
+Physics              85         85         85         85         85              85         85.00      Pass      
+
+Grades for Gon Saraza (2024098):
+Course               Quiz 1     Quiz 2     Quiz 3     Project    Summative Exam  Final Exam Percentage Status    
+--------------------------------------------------------------------------------------------------------
+History              70         70         70         70         70              70         70.00      Fail      
+Biology              65         65         65         65         65              65         65.00      Fail      
+Chemistry            75         75         75         75         75              75         75.00      Pass      
+
+Grades for Jenny Cruz (2024451):
+Course               Quiz 1     Quiz 2     Quiz 3     Project    Summative Exam  Final Exam Percentage Status    
+--------------------------------------------------------------------------------------------------------
+Mathematics          85         85         85         85         85              85         85.00      Pass      
+English              90         90         90         90         90              90         90.00      Pass      
+Art                  95         95         95         95         95              95         95.00      Pass      
+
+Grades for Alice Johnson (2025001):
+Course               Quiz 1     Quiz 2     Quiz 3     Project    Summative Exam  Final Exam Percentage Status    
+--------------------------------------------------------------------------------------------------------
+English              95         95         95         95         95              95         95.00      Pass      
+Physics              92         92         92         92         92              92         92.00      Pass      
+Computer Science     88         88         88         88         88              88         88.00      Pass      
+
+Grades for Bob Brown (2025002):
+Course               Quiz 1     Quiz 2     Quiz 3     Project    Summative Exam  Final Exam Percentage Status    
+--------------------------------------------------------------------------------------------------------
+History              75         75         75         75         75              75         75.00      Pass      
+Chemistry            70         70         70         70         70              70         70.00      Fail      
+Mathematics          60         60         60         60         60              60         60.00      Fail      
+Art                  9          104        21         44         23              94         49.17      Fail      
+
