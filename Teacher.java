@@ -3,6 +3,11 @@ import java.util.*;
 
 public class Teacher extends User {
 
+    @Override
+    public void navigate(Scanner scanner) {
+        teacherInterface(scanner, this.id);
+    }
+
     private String name;
     private String id;
     private List<String> subjects;
@@ -39,18 +44,12 @@ public class Teacher extends User {
 
     // Method to assign grade to a student
     public void assignGrade(Scanner scanner, Student student, Course course) {
-        System.out.print("Enter grade for Quiz 1 (1-100): ");
-        int quiz1 = scanner.nextInt();
-        System.out.print("Enter grade for Quiz 2 (1-100): ");
-        int quiz2 = scanner.nextInt();
-        System.out.print("Enter grade for Quiz 3 (1-100): ");
-        int quiz3 = scanner.nextInt();
-        System.out.print("Enter grade for Project (1-100): ");
-        int project = scanner.nextInt();
-        System.out.print("Enter grade for Summative Exam (1-100): ");
-        int summativeExam = scanner.nextInt();
-        System.out.print("Enter grade for Final Exam (1-100): ");
-        int finalExam = scanner.nextInt();
+        int quiz1 = getValidGrade(scanner, "Enter grade for Quiz 1 (1-100): ");
+        int quiz2 = getValidGrade(scanner, "Enter grade for Quiz 2 (1-100): ");
+        int quiz3 = getValidGrade(scanner, "Enter grade for Quiz 3 (1-100): ");
+        int project = getValidGrade(scanner, "Enter grade for Project (1-100): ");
+        int summativeExam = getValidGrade(scanner, "Enter grade for Summative Exam (1-100): ");
+        int finalExam = getValidGrade(scanner, "Enter grade for Final Exam (1-100): ");
         scanner.nextLine(); // Consume newline
 
         int total = quiz1 + quiz2 + quiz3 + project + summativeExam + finalExam;
@@ -61,11 +60,48 @@ public class Teacher extends User {
         System.out.println("Grades assigned to " + student.getName() + " for " + course.getName());
     }
 
+    private int getValidGrade(Scanner scanner, String prompt) {
+        int grade;
+        while (true) {
+            System.out.print(prompt);
+            if (scanner.hasNextInt()) {
+                grade = scanner.nextInt();
+                if (grade >= 1 && grade <= 100) {
+                    break;
+                } else {
+                    System.out.println("Invalid grade. Please enter a value between 1 and 100.");
+                }
+            } else {
+                System.out.println("Invalid input. Please enter an integer.");
+                scanner.next(); // Consume invalid input
+            }
+        }
+        return grade;
+    }
+
     public void assignGradeToStudent(Scanner scanner) {
+        System.out.println("=====================================");
+        System.out.println("============ List of Students ========");
+        System.out.println("=====================================");
+        System.out.printf("%-20s | %-10s%n", "Student Name", "ID");
+        System.out.println("-------------------------------------");
+        for (Student student : Main.getStudents()) {
+            System.out.printf("%-20s | %-10s%n", student.getName(), student.getId());
+        }
+        System.out.println("=====================================");
         System.out.print("Enter student ID to assign grade to: ");
         String studentId = scanner.nextLine();
         Student student = findStudentById(studentId);
         if (student != null) {
+            System.out.println("=====================================");
+            System.out.println("============ List of Courses ========");
+            System.out.println("=====================================");
+            System.out.printf("%-20s | %-10s%n", "Course Name", "Code");
+            System.out.println("-------------------------------------");
+            for (Course course : Main.getCourses()) {
+                System.out.printf("%-20s | %-10s%n", course.getName(), course.getCode());
+            }
+            System.out.println("=====================================");
             System.out.print("Enter course code: ");
             String courseCode = scanner.nextLine();
             Course course = findCourseByCode(courseCode);
@@ -132,12 +168,28 @@ public class Teacher extends User {
     }
 
     public static void removeTeacher(Scanner scanner) {
+        System.out.println("=====================================");
+        System.out.println("===== List of Teachers =====");
+        System.out.println("=====================================");
+        System.out.printf("%-20s | %-10s%n", "Teacher Name", "ID");
+        System.out.println("-------------------------------------");
+        for (Teacher teacher : Main.getTeachers()) {
+            System.out.printf("%-20s | %-10s%n", teacher.getName(), teacher.getId());
+        }
+        System.out.println("=====================================");
         System.out.print("Enter teacher ID to remove: ");
         String id = scanner.nextLine();
         Teacher teacher = findTeacherById(id);
         if (teacher != null) {
-            Main.getTeachers().remove(teacher);
-            System.out.println("Teacher removed successfully.");
+            System.out.println("Teacher found: " + teacher.getName() + " (ID: " + teacher.getId() + ")");
+            System.out.print("Are you sure you want to remove this teacher? (yes/no): ");
+            String confirmation = scanner.nextLine();
+            if (confirmation.equalsIgnoreCase("yes")) {
+                Main.getTeachers().remove(teacher);
+                System.out.println("Teacher removed successfully.");
+            } else {
+                System.out.println("Teacher removal canceled.");
+            }
         } else {
             System.out.println("Teacher not found.");
         }
@@ -152,13 +204,28 @@ public class Teacher extends User {
         return null;
     }
 
+    public static void viewAvailableCourses() {
+        System.out.println("=====================================");
+        System.out.println("===== List of Available Courses =====");
+        System.out.println("=====================================");
+        System.out.printf("%-20s | %-10s%n", "Course Name", "Code");
+        System.out.println("-------------------------------------");
+        for (Course course : Main.getCourses()) {
+            System.out.printf("%-20s | %-10s%n", course.getName(), course.getCode());
+        }
+        System.out.println("=====================================");
+    }
+
     public static void teacherInterface(Scanner scanner, String teacherId) {
         int choice;
         do {
-            System.out.println("\n=== TEACHER INTERFACE ===");
+            System.out.println("\n=====================================");
+            System.out.println("=========== TEACHER MENU ===========");
+            System.out.println("=====================================");
             System.out.println("[ 1 ] - VIEW ALL STUDENTS");
             System.out.println("[ 2 ] - UPDATE STUDENT GRADES");
-            System.out.println("[ 3 ] - SAVE");
+            System.out.println("[ 3 ] - VIEW AVAILABLE COURSES");
+            System.out.println("[ 4 ] - SAVE");
             System.out.println("[ 0 ] - LOGOUT");
             System.out.print("Enter your choice: ");
             while (!scanner.hasNextInt()) {
@@ -173,7 +240,8 @@ public class Teacher extends User {
             switch (choice) {
                 case 1 -> Student.viewAllStudents(Main.getStudents());
                 case 2 -> new Teacher("", "").assignGradeToStudent(scanner);
-                case 3 -> saveGradesToFile();
+                case 3 -> viewAvailableCourses();
+                case 4 -> saveGradesToFile();
                 case 0 -> System.out.println("Logging out...");
                 default -> System.out.println("Invalid choice. Please try again.");
             }
@@ -192,38 +260,6 @@ public class Teacher extends User {
             System.out.println("An error occurred while saving the grades.");
             e.printStackTrace();
         }
-    }
-
-    @Override
-    public void navigate(Scanner scanner) {
-        System.out.println("\nWelcome Teacher!");
-        int choice;
-        do {
-            System.out.println("\n===============================");
-            System.out.println("========= TEACHER MENU =========");
-            System.out.println("===============================");
-            System.out.println("[ 1 ] - ASSIGN GRADES");
-            System.out.println("[ 2 ] - VIEW GRADES");
-            System.out.println("[ 0 ] - LOGOUT");
-            System.out.print("Enter your choice: ");
-            choice = scanner.nextInt();
-            scanner.nextLine(); // Consume the leftover newline after nextInt()
-
-            switch (choice) {
-                case 1:
-                    assignGradeToStudent(scanner);
-                    break;
-                case 2:
-                    System.out.println("Viewing grades...");
-                    // Logic to view grades should be added here
-                    break;
-                case 0:
-                    System.out.println("Logging out...");
-                    break;
-                default:
-                    System.out.println("Invalid choice. Please try again.");
-            }
-        } while (choice != 0);
     }
 
     @Override

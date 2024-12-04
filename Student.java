@@ -155,7 +155,9 @@ public class Student {
 
         int choice;
         do {
-            System.out.println("\n=== STUDENT INTERFACE ===");
+            System.out.println("\n=====================================");
+            System.out.println("=========== STUDENT MENU ===========");
+            System.out.println("=====================================");
             System.out.println("[ 1 ] - VIEW MY GRADES");
             System.out.println("[ 2 ] - PRINT MY GRADE");
             System.out.println("[ 0 ] - LOGOUT");
@@ -176,5 +178,33 @@ public class Student {
                 default -> System.out.println("Invalid choice. Please try again.");
             }
         } while (choice != 0);
+    }
+
+    public static void removeStudent(Scanner scanner) {
+        System.out.println("=====================================");
+        System.out.println("===== List of Students =====");
+        System.out.println("=====================================");
+        System.out.printf("%-20s | %-10s%n", "Student Name", "ID");
+        System.out.println("-------------------------------------");
+        for (Student student : User.getStudents()) {
+            System.out.printf("%-20s | %-10s%n", student.getName(), student.getId());
+        }
+        System.out.println("=====================================");
+        System.out.print("Enter student ID to remove: ");
+        String id = scanner.nextLine();
+        Student student = findStudentById(User.getStudents(), id);
+        if (student != null) {
+            System.out.println("Student found: " + student.getName() + " (ID: " + student.getId() + ")");
+            System.out.print("Are you sure you want to remove this student? (yes/no): ");
+            String confirmation = scanner.nextLine();
+            if (confirmation.equalsIgnoreCase("yes")) {
+                User.getStudents().remove(student);
+                System.out.println("Student removed successfully.");
+            } else {
+                System.out.println("Student removal canceled.");
+            }
+        } else {
+            System.out.println("Student not found.");
+        }
     }
 }

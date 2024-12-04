@@ -13,7 +13,9 @@ public class Admin extends User {
     public void navigate(Scanner scanner) {
         int choice;
         do {
-            System.out.println("\n=== ADMIN MENU ===");
+            System.out.println("\n==================================");
+            System.out.println("=========== ADMIN MENU ===========");
+            System.out.println("==================================");
             System.out.println("[ 1 ] - TEACHER");
             System.out.println("[ 2 ] - STUDENT");
             System.out.println("[ 3 ] - GENERATE REPORT");
@@ -104,7 +106,7 @@ public class Admin extends User {
 
             switch (choice) {
                 case 1 -> Main.viewAllTeachers();
-                case 2 -> Teacher.addTeacher(scanner);
+                case 2 -> new Teacher("", "").assignGradeToStudent(scanner);
                 case 3 -> Teacher.removeTeacher(scanner);
                 case 0 -> System.out.println("Returning to Admin Menu...");
                 default -> System.out.println("Invalid choice. Please try again.");
@@ -135,7 +137,7 @@ public class Admin extends User {
             switch (choice) {
                 case 1 -> Main.viewAllStudents();
                 case 2 -> addStudent(scanner);
-                case 3 -> removeStudent(scanner);
+                case 3 -> Student.removeStudent(scanner);
                 case 0 -> System.out.println("Returning to Admin Menu...");
                 default -> System.out.println("Invalid choice. Please try again.");
             }
