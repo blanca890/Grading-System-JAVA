@@ -32,5 +32,5 @@ Course               Quiz 1     Quiz 2     Quiz 3     Project    Summative Exam 
 History              75         75         75         75         75              75         75.00      Pass      
 Chemistry            70         70         70         70         70              70         70.00      Fail      
 Mathematics          60         60         60         60         60              60         60.00      Fail      
-Art                  9          104        21         44         23              94         49.17      Fail      
+Physics              70         60         50         40         30              20         45.00      Fail      
 

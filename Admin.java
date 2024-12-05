@@ -106,7 +106,7 @@ public class Admin extends User {
 
             switch (choice) {
                 case 1 -> Main.viewAllTeachers();
-                case 2 -> new Teacher("", "").assignGradeToStudent(scanner);
+                case 2 -> Teacher.addTeacher(scanner);
                 case 3 -> Teacher.removeTeacher(scanner);
                 case 0 -> System.out.println("Returning to Admin Menu...");
                 default -> System.out.println("Invalid choice. Please try again.");
